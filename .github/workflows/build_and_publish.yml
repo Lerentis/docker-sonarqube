@@ -1,0 +1,43 @@
+name: cd
+
+on:
+  push:
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [9/community, 9/developer, 9/enterprise, 9/datacenter/app, 9/datacenter/search]
+        include:
+          - version: 9/community
+            tag: 9-community
+          - version: 9/developer
+            tag: 9-developer
+          - version: 9/enterprise
+            tag: 9-enterprise
+          - version: 9/datacenter/app
+            tag: 9-datacenter-app
+          - version: 9/datacenter/search
+            tag: 9-datacenter-search
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+      - name: Available platforms
+        run: echo ${{ steps.qemu.outputs.platforms }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+      - name: login to registry
+        run: echo ${{ secrets.PAT }} | docker login ghcr.io -u Lerentis --password-stdin
+      - name: build
+        run: |
+          docker buildx build -t ghcr.io/lerentis/${{ matrix.tag }} --platform=linux/arm64,linux/amd64 ${{ matrix.version }} --push
