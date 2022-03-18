@@ -40,4 +40,4 @@ jobs:
         run: echo ${{ secrets.PAT }} | docker login ghcr.io -u Lerentis --password-stdin
       - name: build
         run: |
-          docker buildx build -t ghcr.io/lerentis/${{ matrix.tag }} --platform=linux/arm64,linux/amd64 ${{ matrix.version }} --push
+          docker buildx build --pull -t ghcr.io/lerentis/${{ matrix.tag }} --platform=linux/arm64,linux/amd64 ${{ matrix.version }} --push
