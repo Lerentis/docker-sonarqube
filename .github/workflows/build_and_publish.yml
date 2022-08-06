@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [9/community, 9/developer, 9/enterprise, 9/datacenter/app, 9/datacenter/search]
+        version: [9/community, 9/developer, 9/enterprise, 9/datacenter/app, 9/datacenter/search, 8/community, 8/developer, 8/enterprise, 8/datacenter/app, 8/datacenter/search]
         include:
           - version: 9/community
             tag: 9-community
@@ -20,6 +20,16 @@ jobs:
             tag: 9-datacenter-app
           - version: 9/datacenter/search
             tag: 9-datacenter-search
+          - version: 8/community
+            tag: 8-community
+          - version: 8/developer
+            tag: 8-developer
+          - version: 8/enterprise
+            tag: 8-enterprise
+          - version: 8/datacenter/app
+            tag: 8-datacenter-app
+          - version: 8/datacenter/search
+            tag: 8-datacenter-search
     steps:
       - name: Checkout
         uses: actions/checkout@v2
